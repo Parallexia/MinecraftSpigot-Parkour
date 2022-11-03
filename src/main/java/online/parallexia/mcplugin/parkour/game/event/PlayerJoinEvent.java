@@ -11,7 +11,7 @@ public class PlayerJoinEvent extends Event {
     Player player;
     ParkourRegion region;
     
-    private final HandlerList handlerList = new HandlerList();
+    private static final HandlerList handlerList = new HandlerList();
     @NotNull
     @Override
     public HandlerList getHandlers() {
