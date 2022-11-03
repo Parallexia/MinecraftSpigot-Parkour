@@ -1,4 +1,4 @@
-package online.parallexia.mcplugin.parkour.play.event;
+package online.parallexia.mcplugin.parkour.game.event;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
