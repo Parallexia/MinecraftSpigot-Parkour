@@ -1,6 +1,6 @@
-package online.parallexia.mcplugin.parkour.game.event;
+package online.parallexia.mcplugin.parkour.event.game;
 
-import online.parallexia.mcplugin.parkour.game.eneity.IGame;
+import online.parallexia.mcplugin.parkour.eneity.game.IGame;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -14,6 +14,7 @@ public class StepOnBlockEvent extends Event {
 
     private static final HandlerList handlerList = new HandlerList();
 
+    /*玩家所在的游戏*/
     public IGame game;
     /*玩家所踩下的方块*/
     public Block block;

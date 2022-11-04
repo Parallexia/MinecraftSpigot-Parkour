@@ -1,15 +1,12 @@
-package online.parallexia.mcplugin.parkour.game.eneity;
+package online.parallexia.mcplugin.parkour.eneity.game;
 
-import online.parallexia.mcplugin.parkour.game.factory.GameFactory;
+import online.parallexia.mcplugin.parkour.factory.game.GameFactory;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /*跑酷区域
 * <p>一个跑酷区域可创建多个游戏实例，游戏实例的个数由游戏实例的大小决定</p>*/
@@ -37,19 +34,19 @@ public class ParkourRegion {
     //计算跑酷区域大小
     @NotNull
     private Vector calcRegionSize(){
-        return calcRegionSize(this.getLocation2().subtract(getLocation1()).toVector());
+        return calcRegionSize(this.location1,this.location2);
     }
 
-    public static Vector calcRegionSize(Vector size){
+    public static Vector calcRegionSize(@NotNull Location location1,@NotNull Location location2){
         int x1,y1,z1;
         int x2,y2,z2;
-        x1 = size.getBlockX();
-        y1 = size.getBlockY();
-        z1 = size.getBlockZ();
+        x1 = location1.getBlockX();
+        y1 = location1.getBlockY();
+        z1 = location1.getBlockZ();
 
-        x2 = size.getBlockX();
-        y2 = size.getBlockY();
-        z2 = size.getBlockZ();
+        x2 = location2.getBlockX();
+        y2 = location2.getBlockY();
+        z2 = location2.getBlockZ();
 
         int x,y,z;
         x = Math.abs(x2-x1);
@@ -58,8 +55,8 @@ public class ParkourRegion {
         return new Vector(x,y,z);
     }
     //计算该跑酷区域支持的实例数量
-    public int calcMaxInstance(@NotNull Vector initGameSize){
-        Vector size = calcRegionSize();
+    public static int calcMaxInstance(@NotNull Vector initGameSize,@NotNull ParkourRegion region){
+        Vector size = calcRegionSize(region.location1,region.location2 );
         int x,y,z;
         x = size.getBlockX();
         y = size.getBlockY();
@@ -67,12 +64,12 @@ public class ParkourRegion {
         int count = Math.min(x / (initGameSize.getBlockX()),y / (initGameSize.getBlockY()));
         count = Math.min(count,z / (initGameSize.getBlockZ()));
 
-        this.maxInstance = count;
+        region.maxInstance = count;
         return count;
     }
     //计算跑酷实例起始点的位置
-    private List<Location> calcInstLocation(@NotNull Vector initGameSize){
-        List<Location> locations = new ArrayList<>();
+    private Dictionary<Location,Vector> calcInstLocationAndLineVector(@NotNull Vector initGameSize){
+        Dictionary<Location,Vector> locations = new Hashtable<>();
         Vector size = calcRegionSize();
         int xvalue = 0,yvalue = 0,zvalue = 0;
         //计算对角线向量
@@ -88,10 +85,15 @@ public class ParkourRegion {
                     xvalue = k * nx * initGameSize.getBlockX();
                     yvalue = j * ny * initGameSize.getBlockY();
                     zvalue = i * nz * initGameSize.getBlockZ();
-                    locations.add(new Location(location1.getWorld(),
+                    locations.put (new Location(location1.getWorld(),
                             location1.getBlockX() + xvalue,
                             location1.getBlockY() + yvalue,
-                            location1.getBlockZ() + zvalue)
+                            location1.getBlockZ() + zvalue),
+
+                            new Vector(initGameSize.getBlockX() * nx,
+                                    initGameSize.getBlockX() * ny,
+                                    initGameSize.getBlockX() * nz
+                                    )
                     );
                 }
             }
@@ -99,12 +101,18 @@ public class ParkourRegion {
         return locations;
     }
 
-    public void initInstance(GameOption option){
-        Vector initGameSize = option.getSize(option.step);
-        calcMaxInstance(initGameSize);
-        List<Location> locations = calcInstLocation(initGameSize);
-        for (Location location:locations)
-            this.instanceList.add(GameFactory.newGame(location,option,null));
+    public void initInstance(@NotNull IGameOption option){
+        Vector initGameSize = option.getSize(option.getMaxStep());
+        Dictionary<Location,Vector> dictionary = calcInstLocationAndLineVector(initGameSize);
+        Enumeration<Location> locations = dictionary.keys();
+
+        Location location;
+        Vector vector;
+        while(locations.hasMoreElements()){
+            location = locations.nextElement();
+            vector = dictionary.get(location);
+            this.instanceList.add(GameFactory.newGame(location,vector,option,null));
+        }
     }
 
     public void newGame(Player player) throws ArrayStoreException{
@@ -142,18 +150,23 @@ public class ParkourRegion {
     public void setLocation1(@NotNull Location location){
         this.location1 = location;
     }
-
     public void setLocation2(@NotNull Location location){
         this.location2 = location;
     }
-
     @NotNull
     public Location getLocation1(){
         return this.location1;
     }
-
     @NotNull
     public Location getLocation2(){
         return this.location2;
+    }
+
+    //存储相关
+    public boolean getStored(){
+        return isStored;
+    }
+    public void setStored(Boolean stored){
+        isStored = stored;
     }
 }
