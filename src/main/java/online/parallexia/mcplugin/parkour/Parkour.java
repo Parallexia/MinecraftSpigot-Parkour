@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 public final class Parkour extends JavaPlugin {
 private static JavaPlugin instance = null;
-private String pluginName = "Parkour";
+private final String pluginName = "Parkour";
 private final Logger logger = LoggerFactory.getLogger("pluginLogger");;
 public static JavaPlugin getInstance() {
     return instance;

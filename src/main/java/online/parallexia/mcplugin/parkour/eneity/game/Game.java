@@ -53,14 +53,13 @@ public class Game implements IGame{
     public UUID getUUID() {
         return this.uuid;
     }
-
     @Override
+    @NotNull
     public IGameOption getGameOption() {
         return option;
     }
-
     @Override
-    public Location getLocation() {
+    public @NotNull Location getLocation() {
         return position;
     }
 
@@ -70,20 +69,6 @@ public class Game implements IGame{
     public Vector getLineVector(){
         return lineVector.clone();
     }
-
-    @Override
-    public void start() throws NullPointerException{
-        if (Objects.isNull(this.player))
-            throw new NullPointerException("玩家不存在");
-        this.isStarted = true;
-
-    }
-
-    @Override
-    public void end() {
-        this.isStarted = false;
-    }
-
     @Override
     @NotNull
     public List<Player> getPlayer() {
@@ -94,17 +79,17 @@ public class Game implements IGame{
     }
 
     @Override
-    public boolean inGame() {
+    public boolean getStarted() {
         return this.isStarted;
     }
-
+    @Override
+    public void setStarted(boolean started) {this.isStarted = started;}
     @Override
     public void setPlayer(@NotNull List<Player> players) {
         this.player = players.get(0);
     }
-
     @Override
-    public IParkourGameLogic getGameLogic(){
+    public @NotNull IParkourGameLogic getGameLogic(){
         return gameLogic;
     }
 
@@ -225,6 +210,16 @@ public class Game implements IGame{
             boolean isSuccessfulOnBlock = isSuccessfulOnTargetBlock(event.game,event.player);
             if (isSuccessfulOnBlock)
                 generateNewTarget(event.game, event.player);
+        }
+
+        private void start(IGame game) throws NullPointerException{
+            if (game.getPlayer().isEmpty())
+                throw new NullPointerException("玩家不存在");
+            game.setStarted(true);
+        }
+
+        private void stop(IGame game) {
+            game.setStarted(false);
         }
     }
 }

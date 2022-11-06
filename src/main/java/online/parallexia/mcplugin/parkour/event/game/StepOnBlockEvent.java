@@ -7,9 +7,9 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-/*
-玩家踩下方块的事件
-当玩家踩下方块后，触发该事件，并传递踩下的方块与玩家*/
+/**
+<h>玩家踩下方块的事件</h>
+<p>当玩家踩下方块后，触发该事件，并传递踩下的方块与玩家<p/>*/
 public class StepOnBlockEvent extends Event {
 
     private static final HandlerList handlerList = new HandlerList();

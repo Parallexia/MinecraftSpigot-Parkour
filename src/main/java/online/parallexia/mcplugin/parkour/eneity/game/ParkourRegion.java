@@ -1,6 +1,7 @@
 package online.parallexia.mcplugin.parkour.eneity.game;
 
 import online.parallexia.mcplugin.parkour.factory.game.GameFactory;
+import online.parallexia.mcplugin.parkour.repository.IRepository;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -8,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
-/*跑酷区域
-* <p>一个跑酷区域可创建多个游戏实例，游戏实例的个数由游戏实例的大小决定</p>*/
+/**<h>跑酷区域</h>
+* <p>一个跑酷区域可创建多个游戏实例，游戏实例的个数由游戏实例的大小决定</p>
+ * <p>该类应该由工厂类创建</p>
+* */
 public class ParkourRegion {
-    //使用工厂类进行实例构建
     public ParkourRegion(@NotNull Location Location1,@NotNull Location Location2,String name){
         //检测选取区域是否合法
         //检测选取区域是否重叠
@@ -37,6 +39,11 @@ public class ParkourRegion {
         return calcRegionSize(this.location1,this.location2);
     }
 
+    /**
+     * <p>计算跑酷区域的大小</p>
+     * @param location1 第一个选定点
+     * @param location2 第二个选定点
+     * @return 第二个选定点减去第一个选定点的向量*/
     public static Vector calcRegionSize(@NotNull Location location1,@NotNull Location location2){
         int x1,y1,z1;
         int x2,y2,z2;
@@ -54,7 +61,12 @@ public class ParkourRegion {
         z = Math.abs(z2-z1);
         return new Vector(x,y,z);
     }
-    //计算该跑酷区域支持的实例数量
+
+    /**
+     * <p>计算该跑酷区域支持的实例数量</p>
+     * @param region 要计算的区域
+     * @param initGameSize 游戏实例的对角线向量（为正）
+     * @return 计算出的最大支持的游戏实例*/
     public static int calcMaxInstance(@NotNull Vector initGameSize,@NotNull ParkourRegion region){
         Vector size = calcRegionSize(region.location1,region.location2 );
         int x,y,z;
@@ -101,8 +113,8 @@ public class ParkourRegion {
         return locations;
     }
 
-    public void initInstance(@NotNull IGameOption option){
-        Vector initGameSize = option.getSize(option.getMaxStep());
+    private void initInstance(@NotNull IGameOption option){
+        Vector initGameSize = option.getSize();
         Dictionary<Location,Vector> dictionary = calcInstLocationAndLineVector(initGameSize);
         Enumeration<Location> locations = dictionary.keys();
 
@@ -119,7 +131,7 @@ public class ParkourRegion {
         IGame game = null;
         while (instanceList.iterator().hasNext()) {
             IGame next = instanceList.iterator().next();
-            if (!next.inGame()){
+            if (!next.getStarted()){
                 game = next;
                 break;
             }
@@ -163,9 +175,14 @@ public class ParkourRegion {
     }
 
     //存储相关
+    /**
+     * 获取该跑酷区域是否被持久化保存*/
     public boolean getStored(){
         return isStored;
     }
+    /**
+     * 设置该实例被永久化保存
+     * @param stored 保存的状态*/
     public void setStored(Boolean stored){
         isStored = stored;
     }
