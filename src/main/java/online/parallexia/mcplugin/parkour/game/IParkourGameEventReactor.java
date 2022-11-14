@@ -1,13 +1,14 @@
-package online.parallexia.mcplugin.parkour.eneity.game;
+package online.parallexia.mcplugin.parkour.game;
 
 import online.parallexia.mcplugin.parkour.event.game.StepOnBlockEvent;
 
 /**
  * 逻辑与事件处理器的通信接口
- * @see IGameLogic
+ *
+ * @see IGameEventReactor
  * @since  2022/11/4 14:24
  */
-public interface IParkourGameLogic extends IGameLogic {
+public interface IParkourGameEventReactor extends IGameEventReactor {
     /**
      * <p>{@link StepOnBlockEvent}触发的游戏逻辑</p>
      * */

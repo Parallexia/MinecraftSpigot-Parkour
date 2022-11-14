@@ -1,5 +1,6 @@
-package online.parallexia.mcplugin.parkour.eneity.game;
+package online.parallexia.mcplugin.parkour.game;
 
+import online.parallexia.mcplugin.parkour.game.logic.IParkourGameRuntimeField;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -10,7 +11,7 @@ import java.util.UUID;
 
 /**
  * <h>游戏的接口</h>
- * <p>游戏实例应该包含{@link IGameOption},{@link IGameLogic}</p>
+ * <p>游戏实例应该包含{@link IGameOption},{@link IGameEventReactor}</p>
  * <p>游戏的其余字段应该是运行时相关字段，固定参数由{@link IGameOption}负责</p>*/
 public interface IGame {
     /**
@@ -32,7 +33,7 @@ public interface IGame {
     /**
      * <p>获取从游戏区域起始点开始的对角线向量</p>*/
     @NotNull
-    Vector getLineVector();
+    Vector getLineVectorClone();
 
     /**
      * <p>获取在该游戏实例中的玩家列表</p>
@@ -40,18 +41,31 @@ public interface IGame {
      */
     @NotNull
     List<Player> getPlayer();
-    /*@returns 是否在游戏中*/
+
+    /**是否在游戏中*/
     boolean getStarted();
+
+    /**设置是否在游戏中*/
     void setStarted(boolean started);
     /**
      * @return 游戏的执行逻辑的事件接口{@link IGameLogic}
-     * @see IParkourGameLogic
-     * @see IGameLogic
+     * @see IParkourGameEventReactor
+     * @see IGameEventReactor
      * */
     @NotNull
-    IGameLogic getGameLogic();
+    IGameEventReactor getGameLogic();
+
+    /**
+     * 获取游戏运行时可获取字段接口{@link IParkourGameRuntimeField}
+     * @return 游戏运行时可获取字段接口
+     * @throws IllegalStateException 当游戏未在运行时抛出*/
+    IParkourGameRuntimeField getRuntimeField() throws IllegalStateException;
+
     /**
      * 设置在该游戏内的玩家
-     * 实现方法应该对输入进行校验*/
-    void setPlayer(@NotNull List<Player> player);
+     * 实现方法应该对输入进行校验*
+     * @throws IllegalArgumentException 玩家不符合游戏要求 */
+    void setPlayer(@NotNull List<Player> player) throws IllegalArgumentException;
+
+    void getBoundVectorClone(Vector min,Vector max);
 }

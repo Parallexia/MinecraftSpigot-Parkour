@@ -1,7 +1,7 @@
 package online.parallexia.mcplugin.parkour.factory.game;
 
-import online.parallexia.mcplugin.parkour.eneity.game.Game;
-import online.parallexia.mcplugin.parkour.eneity.game.IGameOption;
+import online.parallexia.mcplugin.parkour.game.Game;
+import online.parallexia.mcplugin.parkour.game.IGameOption;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;

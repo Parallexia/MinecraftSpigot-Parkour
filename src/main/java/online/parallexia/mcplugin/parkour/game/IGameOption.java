@@ -1,4 +1,4 @@
-package online.parallexia.mcplugin.parkour.eneity.game;
+package online.parallexia.mcplugin.parkour.game;
 
 import org.bukkit.Material;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -17,6 +17,12 @@ public interface IGameOption{
      * @see Material
      */
     List<Material> getBlockPattern();
+
+    /**
+     * @return 一步最近的方块数
+     * */
+    int getMinStepSize();
+
     /**
      * @return 一步最远的方块数
      */
@@ -25,8 +31,20 @@ public interface IGameOption{
      * @return 该配置下的场地大小
      */
     @NotNull
-    default Vector getSize(){
+    default Vector getSizeClone(){
         return Game.calcSize(getMaxStep(), getMaxStepSize());
     }
+
+    /***
+     * 获取所有方向的最大步数
+     * @return 所有方向的最大步数向量的副本
+     */
+    @NotNull
+    Vector getAllStepsClone();
+
+    /**
+     * 获取垂直方向上的最大步数
+     * 默认跳跃数为1*/
+    default int getZLen() {return 1;}
 }
 

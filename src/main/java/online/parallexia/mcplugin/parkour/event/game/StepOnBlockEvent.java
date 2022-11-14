@@ -1,6 +1,6 @@
 package online.parallexia.mcplugin.parkour.event.game;
 
-import online.parallexia.mcplugin.parkour.eneity.game.IGame;
+import online.parallexia.mcplugin.parkour.game.IGame;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;

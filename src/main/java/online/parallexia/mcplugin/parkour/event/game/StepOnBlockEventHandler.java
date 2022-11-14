@@ -1,7 +1,7 @@
 package online.parallexia.mcplugin.parkour.event.game;
 
-import online.parallexia.mcplugin.parkour.eneity.game.IGame;
-import online.parallexia.mcplugin.parkour.eneity.game.IParkourGameLogic;
+import online.parallexia.mcplugin.parkour.game.IGame;
+import online.parallexia.mcplugin.parkour.game.IParkourGameEventReactor;
 import online.parallexia.mcplugin.parkour.exception.PlayerNotFoundException;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,11 +20,11 @@ public class StepOnBlockEventHandler implements Listener {
         * <p>由于玩家可能退出游戏或下线，所以需要做出判断</p>*/
         if (!player.isOnline() || !event.game.getPlayer().contains(player))
             throw new PlayerNotFoundException(event.player);
-        if (!(game.getGameLogic() instanceof IParkourGameLogic))
+        if (!(game.getGameLogic() instanceof IParkourGameEventReactor))
             throw new ClassCastException("该监听器不支持该游戏逻辑");
 
         /*游戏逻辑部分*/
-        IParkourGameLogic gameLogic = (IParkourGameLogic) game.getGameLogic();
+        IParkourGameEventReactor gameLogic = (IParkourGameEventReactor) game.getGameLogic();
         gameLogic.onPlayerStepOnBlockEventBeHandled(event);
     }
 }

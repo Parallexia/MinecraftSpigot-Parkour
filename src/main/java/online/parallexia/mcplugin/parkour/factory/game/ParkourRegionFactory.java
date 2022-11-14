@@ -1,6 +1,6 @@
 package online.parallexia.mcplugin.parkour.factory.game;
 
-import online.parallexia.mcplugin.parkour.eneity.game.ParkourRegion;
+import online.parallexia.mcplugin.parkour.game.ParkourRegion;
 import org.bukkit.Location;
 
 public class ParkourRegionFactory {

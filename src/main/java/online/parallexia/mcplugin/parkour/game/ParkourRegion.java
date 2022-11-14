@@ -1,7 +1,6 @@
-package online.parallexia.mcplugin.parkour.eneity.game;
+package online.parallexia.mcplugin.parkour.game;
 
 import online.parallexia.mcplugin.parkour.factory.game.GameFactory;
-import online.parallexia.mcplugin.parkour.repository.IRepository;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -79,7 +78,9 @@ public class ParkourRegion {
         region.maxInstance = count;
         return count;
     }
-    //计算跑酷实例起始点的位置
+    /**
+     * <p>计算区域起始点以及向量方向</p>*/
+    @NotNull
     private Dictionary<Location,Vector> calcInstLocationAndLineVector(@NotNull Vector initGameSize){
         Dictionary<Location,Vector> locations = new Hashtable<>();
         Vector size = calcRegionSize();
@@ -113,8 +114,11 @@ public class ParkourRegion {
         return locations;
     }
 
+    /**
+     * <h>初始化实例</h>
+     * @param option 游戏实例的选项*/
     private void initInstance(@NotNull IGameOption option){
-        Vector initGameSize = option.getSize();
+        Vector initGameSize = option.getSizeClone();
         Dictionary<Location,Vector> dictionary = calcInstLocationAndLineVector(initGameSize);
         Enumeration<Location> locations = dictionary.keys();
 
@@ -126,21 +130,23 @@ public class ParkourRegion {
             this.instanceList.add(GameFactory.newGame(location,vector,option,null));
         }
     }
-
+    /**
+     * <h>将一个游戏实例启动</h>
+     * @param player 准备加入该游戏的玩家的{@link List}*/
     public void newGame(Player player) throws ArrayStoreException{
-        IGame game = null;
+        IGame toBeStarted = null;
         while (instanceList.iterator().hasNext()) {
             IGame next = instanceList.iterator().next();
             if (!next.getStarted()){
-                game = next;
+                toBeStarted = next;
                 break;
             }
         }
-        if (Objects.isNull(game))
+        if (Objects.isNull(toBeStarted))
             throw new ArrayStoreException("游戏区域已满");
         List<Player> playerList = new ArrayList<>();
         playerList.add(player);
-        game.setPlayer(playerList);
+        toBeStarted.setPlayer(playerList);
     }
     public UUID getUuid(){
         return uuid;
@@ -153,15 +159,24 @@ public class ParkourRegion {
         return this.name;
     }
 
-    //获取该区域最多支持的游戏数目
+    /**
+     * 获取该区域最多支持的游戏数目
+     */
     public int getMaxGameInstance(){
         return maxInstance;
     }
 
     //区域大小方法对
+    /**
+     * 设置对角线向量的起点
+     * @param location 起点向量*/
     public void setLocation1(@NotNull Location location){
         this.location1 = location;
     }
+
+    /**
+     * 设置对角线向量的终点
+     * @param location 终点向量*/
     public void setLocation2(@NotNull Location location){
         this.location2 = location;
     }
