@@ -8,10 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @SerializableAs("ParkourOption")
-public interface IGameOption{
+public interface IGameOption {
     /**
-     * @return 游戏支持的最远的步数，超过这个步数需要折返*/
+     * @return 游戏支持的最远的步数，超过这个步数需要折返
+     */
     int getMaxStep();
+
     /**
      * @return 生成的方块的材料
      * @see Material
@@ -20,18 +22,19 @@ public interface IGameOption{
 
     /**
      * @return 一步最近的方块数
-     * */
+     */
     int getMinStepSize();
 
     /**
      * @return 一步最远的方块数
      */
     int getMaxStepSize();
+
     /**
      * @return 该配置下的场地大小
      */
     @NotNull
-    default Vector getSizeClone(){
+    default Vector getSizeClone() {
         return Game.calcSize(getMaxStep(), getMaxStepSize());
     }
 
@@ -44,7 +47,10 @@ public interface IGameOption{
 
     /**
      * 获取垂直方向上的最大步数
-     * 默认跳跃数为1*/
-    default int getZLen() {return 1;}
+     * 默认跳跃数为1
+     */
+    default int getZLen() {
+        return 1;
+    }
 }
 
