@@ -63,6 +63,7 @@ public class GameRuntime implements IParkourGameEventExecutor, IParkourGameRunti
     }
 
     /*判断玩家是否成功的踩到了方块上*/
+    //TODO:实现方法
     private boolean isSuccessfulOnTargetBlock(@NotNull IGame game, @NotNull Player player) {
         return false;
     }
@@ -127,8 +128,8 @@ public class GameRuntime implements IParkourGameEventExecutor, IParkourGameRunti
             try {
                 generateNewTarget(event.game, event.player);
             } catch (ExecutionException e) {
-                Parkour.getInstance().getLogger().warning(
-                        "游戏{" + event.game.getUUID().toString() + "}" + "目标方块无法生成"
+                Parkour.logger().warn(
+                        String.format("游戏{%s}目标方块无法生成",event.game.getUUID().toString())
                 );
             }
         }

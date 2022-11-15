@@ -8,26 +8,25 @@ import org.slf4j.LoggerFactory;
 public final class Parkour extends JavaPlugin {
 private static JavaPlugin instance = null;
 private final String pluginName = "Parkour";
-private final Logger logger = LoggerFactory.getLogger("pluginLogger");;
+private final Logger SLFlogger = LoggerFactory.getLogger("pluginLogger");;
 public static JavaPlugin getInstance() {
     return instance;
 }
-
     @Override
     public void onEnable() {
         // Plugin startup logic
         instance = this;
-        logger.info(pluginName+"插件已加载");
+        SLFlogger.info(pluginName+"插件已加载");
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
-        logger.info(pluginName+"插件已卸载");
+        SLFlogger.info(pluginName+"插件已卸载");
     }
 
     @NotNull
-    public Logger logger(){
-    return this.logger;
+    public static Logger logger(){
+    return ((Parkour) instance).SLFlogger;
     }
 }
