@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <h>游戏的接口</h>
@@ -60,10 +61,15 @@ public interface IGame {
     boolean getStarted();
 
     /**
-     * 设置是否在游戏中
+     * 开始该游戏
+     * @throws ExecutionException 当该游戏无法开始时抛出
      */
-    void setStarted(boolean started);
+    void start() throws ExecutionException;
 
+    /**
+     * 停止该游戏
+     * @throws RuntimeException 当游戏无法正常停止时抛出*/
+    void stop() throws RuntimeException;
     /**
      * @return 游戏的执行逻辑的事件接口{@link IGameLogic}
      * @see IParkourGameEventExecutor

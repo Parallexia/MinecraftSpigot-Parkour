@@ -1,13 +1,16 @@
 package online.parallexia.mcplugin.parkour.game;
 
-import online.parallexia.mcplugin.parkour.game.runtime.GameRunTime;
+import online.parallexia.mcplugin.parkour.factory.game.GameFactory;
+import online.parallexia.mcplugin.parkour.game.runtime.GameRuntime;
 import online.parallexia.mcplugin.parkour.game.runtime.IParkourGameRuntimeField;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Type;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <h>游戏类</h>
@@ -18,12 +21,14 @@ public class Game implements IGame {
 
     //TODO:实现对输入的数值进行判断
     //TODO:使用工厂类创建实例
-    public Game(Location position, Vector lineVector, IGameOption option, Player player) {
+    public Game(Location position, Vector lineVector, IGameOption option, Player player, Type factory) throws IllegalAccessException {
+        if (!factory.equals(GameFactory.class))
+            throw new IllegalAccessException("该类只能由"+GameFactory.class.getName()+"类实例化");
         this.option = option;
         this.position = position;
         this.player = player;
         this.lineVector = lineVector;
-        this.gameLogic = new GameRunTime();
+        this.runtime = GameRuntime.newInstance();
     }
 
     /*运行时添加的字段*/
@@ -39,7 +44,7 @@ public class Game implements IGame {
     //在游戏中的玩家
     private Player player;
     //游戏所使用的逻辑
-    private final IParkourGameEventExecutor gameLogic;
+    private final GameRuntime runtime;
     private boolean isStarted = false;
 
     //计算游戏区域的大小，为正值
@@ -105,9 +110,24 @@ public class Game implements IGame {
         return this.isStarted;
     }
 
+    //TODO：完成方法
+    /**
+     * 变量初始化途径：
+     * {@link IGameOption}静态变量
+     * {@link GameRuntime}运行时变量*/
     @Override
-    public void setStarted(boolean started) {
-        this.isStarted = started;
+    public void start() throws ExecutionException {
+        if (Objects.isNull(player))
+            throw new ExecutionException(new NullPointerException("玩家不存在"));
+        runtime.onGameStart(this,player);
+        isStarted = true;
+    }
+
+    //TODO:完成方法
+    @Override
+    public void stop() throws RuntimeException {
+        runtime.onGameStop(this);
+        isStarted = false;
     }
 
     @Override
@@ -119,12 +139,12 @@ public class Game implements IGame {
 
     @Override
     public @NotNull IParkourGameEventExecutor getGameEventExecutor() {
-        return gameLogic;
+        return runtime;
     }
 
     @Override
     public IParkourGameRuntimeField getRuntimeField() throws IllegalStateException {
-        return (IParkourGameRuntimeField) this.gameLogic;
+        return this.runtime;
     }
 
 }
