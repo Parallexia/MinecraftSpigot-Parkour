@@ -46,11 +46,11 @@ public class GameRunTime implements IParkourGameEventExecutor, IParkourGameRunti
     /**
      * 判断游戏实例是否处于运行时
      *
-     * @param game 需要进心判断的游戏实例
-     * @see IGame
+     * @param game 需要进行判断的游戏实例
+     * @see Game
      * @see GameRunTime
      */
-    private void checkRun(@NotNull IGame game) throws IllegalStateException {
+    private static void checkRun(@NotNull IGame game) throws IllegalStateException {
         if (!game.getStarted())
             throw new IllegalStateException("游戏未处于运行时");
     }
@@ -98,7 +98,7 @@ public class GameRunTime implements IParkourGameEventExecutor, IParkourGameRunti
      * @param game   位置所位于的游戏
      * @param result 需要判断的位置
      */
-    private boolean isReachable(Game game, @NotNull Location result) {
+    public boolean isReachable(Game game, @NotNull Location result) {
         checkRun(game);
         //TODO:改为更加精细的判断
         return result.clone().subtract(standBlock.getLocation().clone()).toVector().length() < 5;
