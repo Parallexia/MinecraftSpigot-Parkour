@@ -26,7 +26,7 @@ import java.util.concurrent.ExecutionException;
  * <p>实现了一些运行时变量的获取接口{@link IParkourGameRuntimeField}</p>
  * <p>调用了游戏策略</p>
  */
-public class GameRunTime implements IParkourGameEventExecutor, IParkourGameRuntimeField {
+public class GameRuntime implements IParkourGameEventExecutor, IParkourGameRuntimeField {
     //玩家正在站立的方块
     private Block standBlock;
     //目标方块
@@ -39,7 +39,14 @@ public class GameRunTime implements IParkourGameEventExecutor, IParkourGameRunti
 
     private final ParkourGameStrategy strategy;
 
-    public GameRunTime() {
+    /**
+     * 获取新的运行时实例
+     * */
+    public static GameRuntime newInstance(){
+        return new GameRuntime();
+    }
+
+    private GameRuntime() {
         this.strategy = new ParkourGameStrategy();
     }
 
@@ -48,7 +55,7 @@ public class GameRunTime implements IParkourGameEventExecutor, IParkourGameRunti
      *
      * @param game 需要进行判断的游戏实例
      * @see Game
-     * @see GameRunTime
+     * @see GameRuntime
      */
     private static void checkRun(@NotNull IGame game) throws IllegalStateException {
         if (!game.getStarted())
@@ -62,13 +69,22 @@ public class GameRunTime implements IParkourGameEventExecutor, IParkourGameRunti
 
     /**
      * 当游戏开始时执行的逻辑
+     * 该方法只能由绑定的实体类调用
+     *
      * <p>初始化站立方块</p>
      * <p>初始化目标方块</p>
      */
-    private void onGameStart(@NotNull IGame game, @NotNull Player player) {
+    public void onGameStart(@NotNull IGame game, @NotNull Player player) {
         Block block = game.getLocation().getBlock();
         horizontalMoveDirection = HorizontalMoveDirection.PositiveY;
         verticalMoveDirection = VerticalMoveDirection.Level;
+    }
+
+    /**
+     * 当游戏结束时执行的逻辑
+     * 该方法只能由绑定的实体类调用*/
+    public void onGameStop(@NotNull IGame game){
+
     }
 
     /**

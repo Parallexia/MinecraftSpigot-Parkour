@@ -7,6 +7,7 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /**
  * <h>跑酷区域</h>
@@ -126,8 +127,9 @@ public class ParkourRegion {
      * <h>初始化实例</h>
      *
      * @param option 游戏实例的选项
+     * @throws ExecutionException 无法初始化游戏实例时抛出
      */
-    private void initInstance(@NotNull IGameOption option) {
+    private void initInstance(@NotNull IGameOption option) throws ExecutionException {
         Vector initGameSize = option.getSizeClone();
         Dictionary<Location, Vector> dictionary = calcInstLocationAndLineVector(initGameSize);
         Enumeration<Location> locations = dictionary.keys();
@@ -137,7 +139,8 @@ public class ParkourRegion {
         while (locations.hasMoreElements()) {
             location = locations.nextElement();
             vector = dictionary.get(location);
-            this.instanceList.add(GameFactory.newGame(location, vector, option, null));
+            Game game = GameFactory.newGame(location, vector, option, null);
+            this.instanceList.add(game);
         }
     }
 
@@ -146,7 +149,7 @@ public class ParkourRegion {
      *
      * @param player 准备加入该游戏的玩家的{@link List}
      */
-    public void newGame(Player player) throws ArrayStoreException {
+    public void prepareGameToJoin(Player player) throws ArrayStoreException {
         IGame toBeStarted = null;
         while (instanceList.iterator().hasNext()) {
             IGame next = instanceList.iterator().next();
@@ -162,7 +165,9 @@ public class ParkourRegion {
         toBeStarted.setPlayer(playerList);
     }
 
-    public UUID getUuid() {
+    /**
+     * 获取实例的UUID*/
+    public UUID getUUid() {
         return uuid;
     }
 
