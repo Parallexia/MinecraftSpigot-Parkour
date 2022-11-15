@@ -1,8 +1,7 @@
-package online.parallexia.mcplugin.parkour.game.logic;
+package online.parallexia.mcplugin.parkour.game.runtime;
 
 import org.bukkit.block.Block;
 import org.bukkit.util.Vector;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.NoSuchElementException;
 

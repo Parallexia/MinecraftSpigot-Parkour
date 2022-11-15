@@ -1,7 +1,7 @@
 package online.parallexia.mcplugin.parkour.game;
 
-import online.parallexia.mcplugin.parkour.game.logic.GameLogic;
-import online.parallexia.mcplugin.parkour.game.logic.IParkourGameRuntimeField;
+import online.parallexia.mcplugin.parkour.game.runtime.GameRunTime;
+import online.parallexia.mcplugin.parkour.game.runtime.IParkourGameRuntimeField;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -13,18 +13,17 @@ import java.util.*;
  * <h>游戏类</h>
  * <p>在服务器加载时创建，持久化存储，尽量避免重复创建占用服务器资源</p>
  * <p>方块的生成必须确保不会让玩家从一个区域跳到另外一个区域</p>
- * */
-public class Game implements IGame{
+ */
+public class Game implements IGame {
 
     //TODO:实现对输入的数值进行判断
     //TODO:使用工厂类创建实例
-    public Game(Location position, Vector lineVector, IGameOption option, Player player)
-    {
+    public Game(Location position, Vector lineVector, IGameOption option, Player player) {
         this.option = option;
         this.position = position;
         this.player = player;
         this.lineVector = lineVector;
-        this.gameLogic = new GameLogic();
+        this.gameLogic = new GameRunTime();
     }
 
     /*运行时添加的字段*/
@@ -40,14 +39,14 @@ public class Game implements IGame{
     //在游戏中的玩家
     private Player player;
     //游戏所使用的逻辑
-    private final IParkourGameEventReactor gameLogic;
+    private final IParkourGameEventExecutor gameLogic;
     private boolean isStarted = false;
-    
+
     //计算游戏区域的大小，为正值
-    public static Vector calcSize(int step, int maxStepSize){
+    public static Vector calcSize(int step, int maxStepSize) {
         int hor = (step) * maxStepSize;
         int vet = step + 2;
-        return new Vector(hor,hor,vet);
+        return new Vector(hor, hor, vet);
     }
 
     @Override
@@ -55,22 +54,24 @@ public class Game implements IGame{
     public UUID getUUID() {
         return this.uuid;
     }
+
     @Override
     @NotNull
     public IGameOption getGameOption() {
         return option;
     }
+
     @Override
     public @NotNull Location getLocation() {
         return position;
     }
 
-    //获取游戏区域的大小
     @Override
     @NotNull
-    public Vector getLineVectorClone(){
+    public Vector getLineVectorClone() {
         return lineVector.clone();
     }
+
     @Override
     @NotNull
     public List<Player> getPlayer() {
@@ -82,10 +83,10 @@ public class Game implements IGame{
 
     @Override
     public void getBoundVectorClone(Vector min, Vector max) {
-        if (Objects.isNull(min)){
+        if (Objects.isNull(min)) {
             min = new Vector();
         }
-        if (Objects.isNull(max)){
+        if (Objects.isNull(max)) {
             max = new Vector();
         }
 
@@ -103,16 +104,21 @@ public class Game implements IGame{
     public boolean getStarted() {
         return this.isStarted;
     }
+
     @Override
-    public void setStarted(boolean started) {this.isStarted = started;}
+    public void setStarted(boolean started) {
+        this.isStarted = started;
+    }
+
     @Override
     public void setPlayer(@NotNull List<Player> players) throws IllegalArgumentException {
         if (players.size() < 1)
             throw new IllegalArgumentException("人数不匹配");
         this.player = players.get(0);
     }
+
     @Override
-    public @NotNull IParkourGameEventReactor getGameLogic(){
+    public @NotNull IParkourGameEventExecutor getGameEventExecutor() {
         return gameLogic;
     }
 
