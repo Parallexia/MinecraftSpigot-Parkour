@@ -20,8 +20,7 @@ import java.util.concurrent.ExecutionException;
 public class Game implements IGame {
 
     //TODO:实现对输入的数值进行判断
-    //TODO:使用工厂类创建实例
-    public Game(Location position, Vector lineVector, IGameOption option, Player player, Type factory) throws IllegalAccessException {
+    public Game(@NotNull Location position,@NotNull Vector lineVector,@NotNull IGameOption option, Player player, @NotNull Type factory) throws IllegalAccessException {
         if (!factory.equals(GameFactory.class))
             throw new IllegalAccessException("该类只能由"+GameFactory.class.getName()+"类实例化");
         this.option = option;
@@ -43,7 +42,7 @@ public class Game implements IGame {
 
     //在游戏中的玩家
     private Player player;
-    //游戏所使用的逻辑
+    //游戏运行时
     private final GameRuntime runtime;
     private boolean isStarted = false;
 

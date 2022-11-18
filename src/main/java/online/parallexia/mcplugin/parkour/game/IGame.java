@@ -71,7 +71,7 @@ public interface IGame {
      * @throws RuntimeException 当游戏无法正常停止时抛出*/
     void stop() throws RuntimeException;
     /**
-     * @return 游戏的执行逻辑的事件接口{@link IGameLogic}
+     * @return 游戏的执行逻辑的事件接口 {@link IGameEventExecutor}
      * @see IParkourGameEventExecutor
      * @see IGameEventExecutor
      */

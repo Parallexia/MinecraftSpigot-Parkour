@@ -147,7 +147,7 @@ public class ParkourRegion {
     /**
      * <h>将一个游戏实例启动</h>
      *
-     * @param player 准备加入该游戏的玩家的{@link List}
+     * @param player 准备加入该游戏的玩家
      */
     public void prepareGameToJoin(Player player) throws ArrayStoreException {
         IGame toBeStarted = null;
@@ -207,11 +207,15 @@ public class ParkourRegion {
         this.location2 = location;
     }
 
+    /**
+     * 获取对角线向量的起点位置*/
     @NotNull
     public Location getLocation1() {
         return this.location1;
     }
 
+    /**
+     * 获取对角线向量的终点位置*/
     @NotNull
     public Location getLocation2() {
         return this.location2;
