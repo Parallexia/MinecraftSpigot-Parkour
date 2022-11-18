@@ -1,6 +1,7 @@
 package online.parallexia.mcplugin.parkour.game.strategy;
 
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * <h>水平方向的移动</h>
@@ -31,19 +32,25 @@ public enum HorizontalMoveDirection {
      * @return 新的方向, 且夹角为90°
      * @throws RuntimeException 无法寻找到新的方向
      */
-    public static HorizontalMoveDirection change(HorizontalMoveDirection current, Vector allSteps, Vector maxSteps) throws RuntimeException {
-        int tryStepX = allSteps.getBlockX(), tryStepY = allSteps.getBlockY();
+    public static @NotNull HorizontalMoveDirection change(@NotNull HorizontalMoveDirection current, @NotNull Vector allSteps, @NotNull Vector maxSteps) throws RuntimeException {
+        int tryStepX,tryStepY;
 
-        int distance;
+        int distanceX,distanceY;
         for (HorizontalMoveDirection direction : HorizontalMoveDirection.values()) {
-            distance = Math.abs(current.nx - direction.nx) + Math.abs(current.ny - direction.ny);
-            if (distance != 1) {
+            tryStepX = allSteps.getBlockX();
+            tryStepY = allSteps.getBlockY();
+
+            distanceX = Math.abs(current.nx - direction.nx);
+            distanceY = Math.abs(current.ny - direction.ny);
+            if (!(distanceX == 1 && distanceY == 1)) {
                 continue;
             }
             tryStepX += direction.nx;
             tryStepY += direction.ny;
-            if (0 < tryStepX && tryStepX < maxSteps.getBlockX()
-                    && 0 < tryStepY && tryStepY < maxSteps.getBlockY()) {
+            if (0 <= tryStepX && tryStepX < maxSteps.getBlockX()
+                    && 0 <= tryStepY && tryStepY < maxSteps.getBlockY()) {
+                allSteps.setX(tryStepX);
+                allSteps.setY(tryStepY);
                 return direction;
             }
         }

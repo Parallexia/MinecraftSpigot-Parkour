@@ -54,9 +54,9 @@ public class ParkourGameStrategy {
                 continue;
             }
             Vector change = new Vector();
-            change.setX(random.nextInt(minLen, Math.min(boundX, maxLen) * hor.nx));
-            change.setY(random.nextInt(minLen, Math.min(boundY, maxLen)) * hor.ny);
-            change.setZ(random.nextInt(0, zLen) * vrt.nz);
+            change.setX(random.nextInt((Math.min(boundX, maxLen) - minLen) + minLen)* hor.nx);
+            change.setY(random.nextInt((Math.min(boundY, maxLen) - minLen) + minLen) * hor.ny);
+            change.setZ(random.nextInt(zLen) * vrt.nz);
             return standBlockLocation.getLocation().clone().add(change);
         }
     }
